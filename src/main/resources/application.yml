@@ -1,0 +1,38 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: ecall-incident-orchestrator
+  datasource:
+    url: jdbc:h2:mem:ecalldb;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+    hikari:
+      maximum-pool-size: 30
+      minimum-idle: 10
+      connection-timeout: 5000
+  sql:
+    init:
+      mode: always
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+
+ecall:
+  outbox:
+    polling-interval-ms: 150
+    batch-size: 50
+    max-retries: 4
+    scheduler-enabled: true
+  resilience:
+    failure-rate-threshold: 50.0
+    sliding-window-size: 10
+    minimum-number-of-calls: 5
+    wait-duration-in-open-state-ms: 5000
